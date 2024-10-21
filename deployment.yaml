@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text-processing-deployment
+spec:
+  replicas: 2  # This will run 2 replicas of your container
+  selector:
+    matchLabels:
+      app: text-processing
+  template:
+    metadata:
+      labels:
+        app: text-processing
+    spec:
+      containers:
+      - name: text-processing-container
+        image: your-dockerhub-username/text-processing-app:latest  # Change this to your Docker Hub image
+        volumeMounts:
+        - name: data-volume
+          mountPath: /home/data
+        command: ["python", "/home/scripts.py"]
+      volumes:
+      - name: data-volume
+        hostPath:
+          path: "/home/data"  # This will map to your volume, no need to specify the full local path here
